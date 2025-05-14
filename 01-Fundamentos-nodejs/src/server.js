@@ -3,18 +3,31 @@ import http from "node:http";
 // req : pega requisicao 
 // res : manda uma resposta 
 
+const users = [];
+
 const server = http.createServer((req , res)=> {
     const {method, url} = req
 
-    if (method == "GET" && url === "users"){
-       return res.end("Listagem de usuarios")
+    if (method == "GET" && url === "/users"){
+        
+       return res
+       .setHeader ('Content-type', 'application/json') 
+       .end(JSON.stringify(users)) // (JSON.stringify(users)) : converte o array para string atrves do JSON 
+       
     }
 
-    if(method == "POST" && url === "users"){
-        return res.end("criacao de usuarios")
+    if(method == "POST" && url === "/users"){
+       users.push({
+        id:1,
+        nome:"Rodrigao",
+        email:"RodrigaoThePro@gmail.com",
+
+       });
+
+        return res.writeHead(201).end() // retorna o status code
     }
 
-    return res.end("Hello Rodrigao")
+    return res.writeHead(404).end("Page Not Found")
 })
 
 server.listen(8080);
